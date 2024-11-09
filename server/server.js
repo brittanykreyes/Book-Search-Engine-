@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Apollo Server setup
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -25,13 +25,13 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app });
 
-// Database connection
+
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mern-graphql-book-search", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// Start server
+
 app.listen(PORT, () => {
   console.log(`API server running on http://localhost:${PORT}${server.graphqlPath}`);
 });
