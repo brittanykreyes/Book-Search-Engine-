@@ -6,27 +6,27 @@ import SearchBooks from './components/SearchBooks';
 import SavedBooks from './components/SavedBooks';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
-import Navbar from './components/Navbar'; // A simple navigation bar component
+import Navbar from './components/Navbar'; 
 
-import { GET_ME } from './utils/queries'; // Query to fetch the current logged-in user
+import { GET_ME } from './utils/queries'; 
 import { useQuery } from '@apollo/client';
-import './styles.css';  // Import the CSS file in App.jsx
+import './styles.css';  
 
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const { data, loading } = useQuery(GET_ME);  // Fetch current user data
+  const { data, loading } = useQuery(GET_ME);  
 
-  // Handle user login (set user state)
+  
   useEffect(() => {
     if (data) {
       setLoggedInUser(data.me);
     }
   }, [data]);
 
-  // Apollo Client setup
+
   const client = new ApolloClient({
-    uri: '/graphql',  // The GraphQL server URI
+    uri: '/graphql',  
     cache: new InMemoryCache(),
   });
 
