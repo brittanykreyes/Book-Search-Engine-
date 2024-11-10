@@ -9,8 +9,13 @@ class AuthService {
 
 
   loggedIn() {
-   
-    return !!token && !this.isTokenExpired(token); 
+    try {
+      const token = this.getToken();
+      return token && !this.isTokenExpired(token); 
+
+    } catch (err) {
+      return false
+    }
   }
 
 

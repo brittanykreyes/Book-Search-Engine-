@@ -5,7 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 const { typeDefs, resolvers } = require("./schemas");
-const authMiddleware = require("./controllers/auth");
+const {authMiddleware} = require("./utils/auth");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -17,12 +17,14 @@ app.use(express.json());
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => {
-    const token = req.headers.authorization || "";
-    return { token };
-  },
+  context: authMiddleware
+  // context: ({ req }) => {
+  //   const token = req.headers.authorization || "";
+  //   return { token };
+  // },
 });
-
+async function init (){
+    await server.start()
 server.applyMiddleware({ app });
 
 
@@ -35,3 +37,5 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mern-graphql-bo
 app.listen(PORT, () => {
   console.log(`API server running on http://localhost:${PORT}${server.graphqlPath}`);
 });
+}
+init()

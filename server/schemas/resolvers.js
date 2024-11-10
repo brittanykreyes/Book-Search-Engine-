@@ -4,8 +4,8 @@ const { signToken } = require("../utils/auth");
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
-      if (context.token) {
-        const user = await User.findById(context.token.userId);
+      if (context.user) {
+        const user = await User.findById(context.user._id);
         return user;
       }
       throw new Error("Not authenticated");
@@ -32,12 +32,19 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    saveBook: async (parent, { bookId, title, authors, description, image, link }, context) => {
-      if (context.token) {
+    saveBook: async (parent, { bookData }, context) => {
+      if (context.user) {
         const user = await User.findByIdAndUpdate(
-          context.token.userId,
+          context.user._id,
           {
-            $addToSet: { savedBooks: { bookId, title, authors, description, image, link } },
+            $addToSet: { savedBooks: { 
+              bookId: bookData.bookId, 
+              title: bookData.title, 
+              authors: bookData.authors, 
+              description: bookData.description, 
+              image: bookData.image, 
+              link: bookData.link, 
+            } },
           },
           { new: true }
         );
@@ -46,9 +53,9 @@ const resolvers = {
       throw new Error("Not authenticated");
     },
     removeBook: async (parent, { bookId }, context) => {
-      if (context.token) {
+      if (context.user) {
         const user = await User.findByIdAndUpdate(
-          context.token.userId,
+          context.user._id,
           {
             $pull: { savedBooks: { bookId } },
           },
