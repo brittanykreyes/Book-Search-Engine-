@@ -7,6 +7,11 @@ require("dotenv").config();
 const { typeDefs, resolvers } = require("./schemas");
 const {authMiddleware} = require("./utils/auth");
 
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mern-graphql-book-search", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -27,11 +32,14 @@ async function init (){
     await server.start()
 server.applyMiddleware({ app });
 
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client/dist')));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mern-graphql-book-search", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  });
+}
+
 
 
 app.listen(PORT, () => {
