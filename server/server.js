@@ -3,9 +3,11 @@ const { ApolloServer } = require("apollo-server-express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
+const path = require("path")
 
 const { typeDefs, resolvers } = require("./schemas");
 const {authMiddleware} = require("./utils/auth");
+const { requiredPaths, path } = require("./models/Book");
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mern-graphql-book-search", {
   useNewUrlParser: true,
