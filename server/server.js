@@ -7,7 +7,7 @@ const path = require("path")
 
 const { typeDefs, resolvers } = require("./schemas");
 const {authMiddleware} = require("./utils/auth");
-const { requiredPaths, path } = require("./models/Book");
+
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/mern-graphql-book-search", {
   useNewUrlParser: true,
